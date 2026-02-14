@@ -1,0 +1,169 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --glass-bg: rgba(255, 255, 255, 0.08);
+  --glass-bg-hover: rgba(255, 255, 255, 0.12);
+  --glass-border: rgba(255, 255, 255, 0.15);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+  --glass-blur: 16px;
+
+  --color-surface: #0f1117;
+  --color-surface-elevated: #1a1b23;
+  --color-text-primary: #e4e4e7;
+  --color-text-secondary: #a1a1aa;
+  --color-text-muted: #71717a;
+  --color-accent: #6366f1;
+  --color-accent-hover: #818cf8;
+
+  --status-not-applied: #71717a;
+  --status-applied: #3b82f6;
+  --status-interview: #f59e0b;
+  --status-rejected: #ef4444;
+  --status-accepted: #22c55e;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background: linear-gradient(135deg, #0f1117 0%, #1a1b23 100%);
+  color: var(--color-text-primary);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  top: -20%;
+  left: -10%;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(
+    circle,
+    rgba(99, 102, 241, 0.08) 0%,
+    transparent 70%
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  bottom: -15%;
+  right: -5%;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(
+    circle,
+    rgba(168, 85, 247, 0.06) 0%,
+    transparent 70%
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+
+#root {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+}
+
+@layer components {
+  .glass {
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    box-shadow: var(--glass-shadow);
+  }
+
+  .glass-hover {
+    transition: background 0.2s ease, box-shadow 0.2s ease,
+      transform 0.15s ease;
+  }
+  .glass-hover:hover {
+    background: var(--glass-bg-hover);
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.2);
+    transform: translateY(-1px);
+  }
+
+  .glass-input {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    color: var(--color-text-primary);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    padding: 0.625rem 0.875rem;
+    font-size: 0.875rem;
+    width: 100%;
+    outline: none;
+  }
+  .glass-input::placeholder {
+    color: var(--color-text-muted);
+  }
+  .glass-input:focus {
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+  }
+  .glass-input:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .glass-subtle {
+    background: rgba(255, 255, 255, 0.04);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+  }
+}
+
+/* Select/option dark styling */
+select option {
+  background: #1a1b23;
+  color: var(--color-text-primary);
+}
+
+/* Date input icon color */
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(0.7);
+}
+
+/* Checkbox styling */
+input[type="checkbox"] {
+  accent-color: var(--color-accent);
+}
+
+/* Line clamp utility */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
