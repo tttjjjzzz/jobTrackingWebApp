@@ -24,6 +24,10 @@
   --status-accepted: #22c55e;
 }
 
+html {
+  font-size: 20px; /* 25% scale-up from default 16px */
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -35,6 +39,8 @@ body {
   background: linear-gradient(135deg, #0f1117 0%, #1a1b23 100%);
   color: var(--color-text-primary);
   min-height: 100vh;
+  overflow-y: scroll; /* always reserve scrollbar gutter — prevents layout shift when modal hides overflow */
+  scrollbar-gutter: stable;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -88,7 +94,7 @@ body::after {
   }
 
   .glass-hover {
-    transition: background 0.15s ease, box-shadow 0.15s ease;
+    transition: background 0.075s ease, box-shadow 0.075s ease;
   }
   .glass-hover:hover {
     background: var(--glass-bg-hover);
@@ -100,7 +106,7 @@ body::after {
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 12px;
     color: var(--color-text-primary);
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    transition: border-color 0.075s ease, box-shadow 0.075s ease;
     padding: 0.625rem 0.875rem;
     font-size: 0.875rem;
     width: 100%;

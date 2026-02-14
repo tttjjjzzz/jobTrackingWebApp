@@ -19,11 +19,9 @@ export function Modal({ isOpen, onClose, title, children }: ModalProps) {
     };
     if (isOpen) {
       document.addEventListener('keydown', handleEscape);
-      document.body.style.overflow = 'hidden';
     }
     return () => {
       document.removeEventListener('keydown', handleEscape);
-      document.body.style.overflow = '';
     };
   }, [isOpen, onClose]);
 
@@ -37,16 +35,17 @@ export function Modal({ isOpen, onClose, title, children }: ModalProps) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
+            transition={{ duration: 0.1 }}
             onClick={(e) => {
               if (e.target === overlayRef.current) onClose();
             }}
           />
           <motion.div
             className="relative glass w-full max-w-2xl max-h-[90vh] overflow-y-auto"
-            initial={{ opacity: 0, scale: 0.95, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            transition={{ duration: 0.2, ease: 'easeOut' }}
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 8 }}
+            transition={{ duration: 0.12, ease: 'easeOut' }}
           >
             <div className="flex items-center justify-between p-6 pb-0">
               {title && (
