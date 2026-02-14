@@ -15,7 +15,7 @@ export function JobViewToggle() {
       <button
         onClick={() => toggle('grid')}
         className={cn(
-          'p-1.5 rounded-md transition-all',
+          'p-1.5 rounded-md transition-colors',
           state.viewMode === 'grid'
             ? 'bg-accent text-white'
             : 'text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)]',
@@ -27,7 +27,7 @@ export function JobViewToggle() {
       <button
         onClick={() => toggle('list')}
         className={cn(
-          'p-1.5 rounded-md transition-all',
+          'p-1.5 rounded-md transition-colors',
           state.viewMode === 'list'
             ? 'bg-accent text-white'
             : 'text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)]',

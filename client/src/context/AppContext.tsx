@@ -21,7 +21,6 @@ interface AppState {
   };
   editingJobId: string | null; // null = closed, 'new' = creating, uuid = editing
   deletingJobId: string | null;
-  sidebarOpen: boolean;
 }
 
 type Action =
@@ -32,8 +31,7 @@ type Action =
   | { type: 'SET_SORT'; payload: { sortBy: string; sortOrder: 'asc' | 'desc' } }
   | { type: 'OPEN_EDITOR'; payload: string | null }
   | { type: 'CLOSE_EDITOR' }
-  | { type: 'SET_DELETING'; payload: string | null }
-  | { type: 'TOGGLE_SIDEBAR' };
+  | { type: 'SET_DELETING'; payload: string | null };
 
 const savedViewMode = (typeof localStorage !== 'undefined'
   ? localStorage.getItem('viewMode')
@@ -52,7 +50,6 @@ const initialState: AppState = {
   },
   editingJobId: null,
   deletingJobId: null,
-  sidebarOpen: true,
 };
 
 function reducer(state: AppState, action: Action): AppState {
@@ -77,8 +74,6 @@ function reducer(state: AppState, action: Action): AppState {
       return { ...state, editingJobId: null };
     case 'SET_DELETING':
       return { ...state, deletingJobId: action.payload };
-    case 'TOGGLE_SIDEBAR':
-      return { ...state, sidebarOpen: !state.sidebarOpen };
     default:
       return state;
   }

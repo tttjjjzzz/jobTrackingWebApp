@@ -57,7 +57,7 @@ export function StatusBadge({
           e.stopPropagation();
           setOpen(!open);
         }}
-        className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium transition-all hover:ring-2 hover:ring-white/10"
+        className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium transition-colors hover:brightness-125"
         style={{
           backgroundColor: `${color}20`,
           color: color,
