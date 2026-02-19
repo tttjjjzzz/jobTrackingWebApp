@@ -23,6 +23,7 @@ export const createJobSchema = z.object({
   comments: z.string().max(5000).nullable().optional().default(null),
   externalLinks: z.array(z.string().url('Each link must be a valid URL')).optional().default([]),
   status: z.enum(statusValues).optional().default('not_applied'),
+  logoUrl: z.string().url('Must be a valid URL').nullable().optional().default(null),
 });
 
 export const updateJobSchema = createJobSchema.partial();

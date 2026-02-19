@@ -1,7 +1,7 @@
-import { useEffect } from 'react';
+import { useState } from 'react';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Plus, Trash2 } from 'lucide-react';
+import { Plus, Trash2, Search } from 'lucide-react';
 import {
   createJobSchema,
   ApplicationStatus,
@@ -16,7 +16,10 @@ import { Input } from '../ui/Input';
 import { Select } from '../ui/Select';
 import { TextArea } from '../ui/TextArea';
 import { IconButton } from '../ui/IconButton';
+import { CompanyLogo } from '../ui/CompanyLogo';
+import { LogoPicker } from './LogoPicker';
 import { useCreateJob, useUpdateJob } from '../../hooks/useJobMutations';
+import { cn } from '../../utils/cn';
 
 interface JobFormProps {
   job?: JobApplication | null;
@@ -44,11 +47,14 @@ export function JobForm({ job, onClose }: JobFormProps) {
   const updateMutation = useUpdateJob();
   const isEditing = !!job;
 
+  const [showLogoPicker, setShowLogoPicker] = useState(false);
+
   const {
     register,
     handleSubmit,
     watch,
     control,
+    setValue,
     formState: { errors },
   } = useForm<CreateJobInput>({
     resolver: zodResolver(createJobSchema),
@@ -64,6 +70,7 @@ export function JobForm({ job, onClose }: JobFormProps) {
           comments: job.comments,
           externalLinks: job.externalLinks ?? [],
           status: job.status as any,
+          logoUrl: job.logoUrl ?? null,
         }
       : {
           jobTitle: '',
@@ -76,6 +83,7 @@ export function JobForm({ job, onClose }: JobFormProps) {
           comments: null,
           externalLinks: [],
           status: ApplicationStatus.NOT_APPLIED as any,
+          logoUrl: null,
         },
   });
 
@@ -86,7 +94,11 @@ export function JobForm({ job, onClose }: JobFormProps) {
 
   const positionType = watch('positionType');
   const applied = watch('applied');
+  const statusValue = watch('status');
+  const companyValue = watch('company');
+  const logoUrlValue = watch('logoUrl');
   const showLength = temporaryTypes.includes(positionType);
+  const showAppliedSection = statusValue !== (ApplicationStatus.NOT_APPLIED as string);
 
   const onSubmit = (data: CreateJobInput) => {
     if (isEditing) {
@@ -111,13 +123,66 @@ export function JobForm({ job, onClose }: JobFormProps) {
           error={errors.jobTitle?.message}
           {...register('jobTitle')}
         />
-        <Input
-          id="company"
-          label="Company"
-          placeholder="e.g. Google"
-          error={errors.company?.message}
-          {...register('company')}
-        />
+
+        {/* Company field with logo search */}
+        <div className="space-y-1.5">
+          <div className="flex items-center justify-between">
+            <label
+              htmlFor="company"
+              className="block text-sm font-medium text-[var(--color-text-secondary)]"
+            >
+              Company
+            </label>
+            {companyValue && (
+              <button
+                type="button"
+                onClick={() => setShowLogoPicker((v) => !v)}
+                className="flex items-center gap-1 text-xs text-[var(--color-text-muted)] hover:text-[var(--color-accent)]"
+              >
+                <Search size={11} />
+                {logoUrlValue ? 'Change logo' : 'Search logo'}
+              </button>
+            )}
+          </div>
+          <div className="relative">
+            <div className="flex gap-2 items-center">
+              {logoUrlValue && (
+                <CompanyLogo
+                  logoUrl={logoUrlValue}
+                  company={companyValue || ''}
+                  size="sm"
+                  className="flex-shrink-0"
+                />
+              )}
+              <input
+                id="company"
+                className={cn(
+                  'glass-input flex-1',
+                  errors.company &&
+                    'border-red-500/50 focus:border-red-500 focus:ring-red-500/20',
+                )}
+                placeholder="e.g. Google"
+                {...register('company')}
+              />
+            </div>
+            {errors.company && (
+              <p className="text-xs text-red-400 mt-1">
+                {errors.company.message}
+              </p>
+            )}
+            {showLogoPicker && companyValue && (
+              <LogoPicker
+                company={companyValue}
+                currentLogoUrl={logoUrlValue}
+                onSelect={(url) => {
+                  setValue('logoUrl', url, { shouldDirty: true });
+                  setShowLogoPicker(false);
+                }}
+                onClose={() => setShowLogoPicker(false)}
+              />
+            )}
+          </div>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -158,31 +223,33 @@ export function JobForm({ job, onClose }: JobFormProps) {
         />
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 items-end">
-        <div className="flex items-center gap-3">
-          <input
-            type="checkbox"
-            id="applied"
-            className="w-4 h-4 rounded border-white/20 bg-white/5 text-accent focus:ring-accent/40"
-            {...register('applied')}
-          />
-          <label
-            htmlFor="applied"
-            className="text-sm text-[var(--color-text-secondary)]"
-          >
-            Applied
-          </label>
+      {showAppliedSection && (
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 items-end">
+          <div className="flex items-center gap-3">
+            <input
+              type="checkbox"
+              id="applied"
+              className="w-4 h-4 rounded border-white/20 bg-white/5 text-accent focus:ring-accent/40"
+              {...register('applied')}
+            />
+            <label
+              htmlFor="applied"
+              className="text-sm text-[var(--color-text-secondary)]"
+            >
+              Applied
+            </label>
+          </div>
+          {applied && (
+            <Input
+              id="dateApplied"
+              label="Date Applied"
+              type="date"
+              error={errors.dateApplied?.message}
+              {...register('dateApplied')}
+            />
+          )}
         </div>
-        {applied && (
-          <Input
-            id="dateApplied"
-            label="Date Applied"
-            type="date"
-            error={errors.dateApplied?.message}
-            {...register('dateApplied')}
-          />
-        )}
-      </div>
+      )}
 
       <TextArea
         id="comments"

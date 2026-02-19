@@ -4,6 +4,7 @@ import { POSITION_TYPE_LABELS } from '@jobtracker/shared';
 import { Card } from '../ui/Card';
 import { IconButton } from '../ui/IconButton';
 import { StatusBadge } from './StatusBadge';
+import { CompanyLogo } from '../ui/CompanyLogo';
 import { formatRelativeDate, formatPositionLength } from '../../utils/format';
 import { useAppState } from '../../context/AppContext';
 
@@ -21,13 +22,21 @@ export function JobCard({ job }: JobCardProps) {
       onDoubleClick={() => dispatch({ type: 'OPEN_EDITOR', payload: job.id })}
     >
       <div className="flex items-start justify-between gap-2">
-        <div className="min-w-0 flex-1">
-          <h3 className="font-semibold text-[var(--color-text-primary)] truncate">
-            {job.jobTitle}
-          </h3>
-          <p className="text-sm text-[var(--color-text-secondary)] truncate">
-            {job.company}
-          </p>
+        <div className="flex items-start gap-2.5 min-w-0 flex-1">
+          <CompanyLogo
+            logoUrl={job.logoUrl}
+            company={job.company}
+            size="md"
+            className="mt-0.5"
+          />
+          <div className="min-w-0 flex-1">
+            <h3 className="font-semibold text-[var(--color-text-primary)] truncate">
+              {job.jobTitle}
+            </h3>
+            <p className="text-sm text-[var(--color-text-secondary)] truncate">
+              {job.company}
+            </p>
+          </div>
         </div>
         <StatusBadge jobId={job.id} status={job.status} />
       </div>

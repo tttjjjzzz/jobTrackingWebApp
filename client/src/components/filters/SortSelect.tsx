@@ -43,7 +43,7 @@ export function SortSelect() {
       </select>
       <button
         onClick={toggleOrder}
-        className="glass-input px-2 py-1.5 flex items-center justify-center hover:border-accent transition-colors w-auto"
+        className="glass-input px-2 py-1.5 flex items-center justify-center hover:border-accent w-auto"
         title={state.sort.sortOrder === 'desc' ? 'Descending' : 'Ascending'}
       >
         <ArrowUpDown

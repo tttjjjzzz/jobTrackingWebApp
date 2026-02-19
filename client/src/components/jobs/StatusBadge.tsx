@@ -57,7 +57,7 @@ export function StatusBadge({
           e.stopPropagation();
           setOpen(!open);
         }}
-        className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium transition-colors duration-75 hover:brightness-125"
+        className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium hover:brightness-125 whitespace-nowrap"
         style={{
           backgroundColor: `${color}20`,
           color: color,
@@ -72,7 +72,7 @@ export function StatusBadge({
       </button>
 
       {open && (
-        <div className="absolute top-full right-0 mt-1 z-50 glass py-1 min-w-[140px] overflow-hidden">
+        <div className="absolute top-full right-0 mt-1 z-50 glass py-1 min-w-[160px] overflow-hidden" style={{ background: 'rgba(20, 21, 28, 0.92)' }}>
           {allStatuses.map((s) => {
             const sColor = STATUS_COLORS[s] || '#71717a';
             const sLabel = STATUS_LABELS[s] || s;
@@ -84,7 +84,7 @@ export function StatusBadge({
                   mutation.mutate({ id: jobId, status: s });
                   setOpen(false);
                 }}
-                className="w-full flex items-center gap-2 px-3 py-1.5 text-xs text-left hover:bg-white/10 transition-colors duration-75"
+                className="w-full flex items-center gap-2 px-3 py-1.5 text-xs text-left hover:bg-white/10 whitespace-nowrap"
                 style={{ color: status === s ? sColor : undefined }}
               >
                 <span

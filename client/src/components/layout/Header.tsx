@@ -72,7 +72,7 @@ export function Header() {
                 key={tab.label}
                 onClick={() => handleTabClick(tab.value)}
                 className={cn(
-                  'px-3 py-1.5 rounded-lg text-sm font-medium transition-colors duration-75',
+                  'px-3 py-1.5 rounded-lg text-sm font-medium',
                   isActive
                     ? 'text-[var(--color-text-primary)] bg-white/10'
                     : 'text-[var(--color-text-muted)] hover:text-[var(--color-text-secondary)] hover:bg-white/5',

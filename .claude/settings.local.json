@@ -15,7 +15,9 @@
       "Bash(export PATH=\"/c/Program Files/nodejs:$PATH\")",
       "Bash(npx -w client vite build:*)",
       "Bash(npx:*)",
-      "Bash(node:*)"
+      "Bash(node:*)",
+      "Bash(curl:*)",
+      "Bash(powershell -Command:*)"
     ]
   }
 }

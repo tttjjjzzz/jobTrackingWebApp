@@ -1,5 +1,4 @@
 import { useEffect, useRef, type ReactNode } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
 import { X } from 'lucide-react';
 import { IconButton } from './IconButton';
 
@@ -25,42 +24,30 @@ export function Modal({ isOpen, onClose, title, children }: ModalProps) {
     };
   }, [isOpen, onClose]);
 
+  if (!isOpen) return null;
+
   return (
-    <AnimatePresence>
-      {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          <motion.div
-            ref={overlayRef}
-            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.1 }}
-            onClick={(e) => {
-              if (e.target === overlayRef.current) onClose();
-            }}
-          />
-          <motion.div
-            className="relative glass w-full max-w-2xl max-h-[90vh] overflow-y-auto"
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 8 }}
-            transition={{ duration: 0.12, ease: 'easeOut' }}
-          >
-            <div className="flex items-center justify-between p-6 pb-0">
-              {title && (
-                <h2 className="text-lg font-semibold text-[var(--color-text-primary)]">
-                  {title}
-                </h2>
-              )}
-              <IconButton label="Close" onClick={onClose} className="ml-auto">
-                <X size={18} />
-              </IconButton>
-            </div>
-            <div className="p-6">{children}</div>
-          </motion.div>
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      <div
+        ref={overlayRef}
+        className="absolute inset-0 bg-black/60"
+        onClick={(e) => {
+          if (e.target === overlayRef.current) onClose();
+        }}
+      />
+      <div className="relative glass w-full max-w-2xl max-h-[90vh] overflow-y-auto" style={{ background: 'rgba(20, 21, 28, 0.92)' }}>
+        <div className="flex items-center justify-between p-6 pb-0">
+          {title && (
+            <h2 className="text-lg font-semibold text-[var(--color-text-primary)]">
+              {title}
+            </h2>
+          )}
+          <IconButton label="Close" onClick={onClose} className="ml-auto">
+            <X size={18} />
+          </IconButton>
         </div>
-      )}
-    </AnimatePresence>
+        <div className="p-6">{children}</div>
+      </div>
+    </div>
   );
 }

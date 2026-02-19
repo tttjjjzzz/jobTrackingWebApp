@@ -16,6 +16,7 @@ export const jobs = sqliteTable('jobs', {
     .notNull()
     .default(sql`'[]'`),
   status: text('status').notNull().default('not_applied'),
+  logoUrl: text('logo_url'),
   createdAt: text('created_at').notNull(),
   updatedAt: text('updated_at').notNull(),
 });

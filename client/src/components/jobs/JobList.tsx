@@ -11,7 +11,7 @@ export function JobList({ jobs }: JobListProps) {
       <div className="grid grid-cols-[2fr_1.5fr_120px_1fr_1fr_96px] gap-4 px-4 py-2 text-xs font-medium text-[var(--color-text-muted)] uppercase tracking-wider">
         <span>Position</span>
         <span>Type</span>
-        <span>Status</span>
+        <span className="text-right">Status</span>
         <span>Date</span>
         <span>Applied</span>
         <span />

@@ -86,16 +86,11 @@ body::after {
 @layer components {
   .glass {
     background: var(--glass-bg);
-    backdrop-filter: blur(var(--glass-blur));
-    -webkit-backdrop-filter: blur(var(--glass-blur));
     border: 1px solid var(--glass-border);
     border-radius: 16px;
     box-shadow: var(--glass-shadow);
   }
 
-  .glass-hover {
-    transition: background 0.075s ease, box-shadow 0.075s ease;
-  }
   .glass-hover:hover {
     background: var(--glass-bg-hover);
     box-shadow: 0 8px 40px rgba(0, 0, 0, 0.2);
@@ -106,7 +101,6 @@ body::after {
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 12px;
     color: var(--color-text-primary);
-    transition: border-color 0.075s ease, box-shadow 0.075s ease;
     padding: 0.625rem 0.875rem;
     font-size: 0.875rem;
     width: 100%;
@@ -126,8 +120,6 @@ body::after {
 
   .glass-subtle {
     background: rgba(255, 255, 255, 0.04);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 12px;
   }

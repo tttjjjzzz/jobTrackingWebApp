@@ -101,6 +101,7 @@ export class JobsService {
       comments: data.comments ?? null,
       externalLinks: JSON.stringify(data.externalLinks ?? []),
       status: data.status ?? 'not_applied',
+      logoUrl: data.logoUrl ?? null,
       createdAt: now,
       updatedAt: now,
     };
@@ -128,6 +129,7 @@ export class JobsService {
     if (data.externalLinks !== undefined)
       updates.externalLinks = JSON.stringify(data.externalLinks);
     if (data.status !== undefined) updates.status = data.status;
+    if (data.logoUrl !== undefined) updates.logoUrl = data.logoUrl;
 
     db.update(jobs).set(updates).where(eq(jobs.id, id)).run();
 

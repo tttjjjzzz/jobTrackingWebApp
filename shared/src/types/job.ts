@@ -13,6 +13,7 @@ export interface JobApplication {
   comments: string | null;
   externalLinks: string[];
   status: ApplicationStatus;
+  logoUrl: string | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -28,6 +29,7 @@ export interface CreateJobDTO {
   comments?: string | null;
   externalLinks?: string[];
   status?: ApplicationStatus;
+  logoUrl?: string | null;
 }
 
 export interface UpdateJobDTO extends Partial<CreateJobDTO> {}

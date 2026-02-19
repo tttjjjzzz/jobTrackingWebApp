@@ -21,5 +21,18 @@ export function runMigrations() {
     )
   `);
 
+  // Additive column migrations — SQLite has no ADD COLUMN IF NOT EXISTS,
+  // so we attempt each and swallow the "duplicate column" error.
+  const addColumns = [
+    sql`ALTER TABLE jobs ADD COLUMN logo_url TEXT`,
+  ];
+  for (const stmt of addColumns) {
+    try {
+      db.run(stmt);
+    } catch {
+      // Column already exists — safe to ignore
+    }
+  }
+
   console.log('Database migrations complete');
 }
