@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Plus, Trash2, Search } from 'lucide-react';
+import { Plus, Trash2, Search, MapPin, Loader2 } from 'lucide-react';
 import {
   createJobSchema,
   ApplicationStatus,
@@ -18,7 +18,9 @@ import { TextArea } from '../ui/TextArea';
 import { IconButton } from '../ui/IconButton';
 import { CompanyLogo } from '../ui/CompanyLogo';
 import { LogoPicker } from './LogoPicker';
+import { LocationMap } from '../ui/LocationMap';
 import { useCreateJob, useUpdateJob } from '../../hooks/useJobMutations';
+import { useGeocode } from '../../hooks/useGeocode';
 import { cn } from '../../utils/cn';
 
 interface JobFormProps {
@@ -48,6 +50,7 @@ export function JobForm({ job, onClose }: JobFormProps) {
   const isEditing = !!job;
 
   const [showLogoPicker, setShowLogoPicker] = useState(false);
+  const { geocode, isGeocoding } = useGeocode();
 
   const {
     register,
@@ -71,6 +74,9 @@ export function JobForm({ job, onClose }: JobFormProps) {
           externalLinks: job.externalLinks ?? [],
           status: job.status as any,
           logoUrl: job.logoUrl ?? null,
+          location: job.location ?? null,
+          locationLat: job.locationLat ?? null,
+          locationLng: job.locationLng ?? null,
         }
       : {
           jobTitle: '',
@@ -84,6 +90,9 @@ export function JobForm({ job, onClose }: JobFormProps) {
           externalLinks: [],
           status: ApplicationStatus.NOT_APPLIED as any,
           logoUrl: null,
+          location: null,
+          locationLat: null,
+          locationLng: null,
         },
   });
 
@@ -97,6 +106,9 @@ export function JobForm({ job, onClose }: JobFormProps) {
   const statusValue = watch('status');
   const companyValue = watch('company');
   const logoUrlValue = watch('logoUrl');
+  const locationValue = watch('location');
+  const locationLatValue = watch('locationLat');
+  const locationLngValue = watch('locationLng');
   const showLength = temporaryTypes.includes(positionType);
   const showAppliedSection = statusValue !== (ApplicationStatus.NOT_APPLIED as string);
 
@@ -108,6 +120,19 @@ export function JobForm({ job, onClose }: JobFormProps) {
       );
     } else {
       createMutation.mutate(data, { onSuccess: onClose });
+    }
+  };
+
+  const handleGeocode = async () => {
+    if (!locationValue?.trim()) {
+      setValue('locationLat', null, { shouldDirty: true });
+      setValue('locationLng', null, { shouldDirty: true });
+      return;
+    }
+    const result = await geocode(locationValue);
+    if (result) {
+      setValue('locationLat', result.lat, { shouldDirty: true });
+      setValue('locationLng', result.lng, { shouldDirty: true });
     }
   };
 
@@ -221,6 +246,42 @@ export function JobForm({ job, onClose }: JobFormProps) {
           error={errors.applicationLink?.message}
           {...register('applicationLink')}
         />
+      </div>
+
+      {/* Location */}
+      <div className="space-y-2">
+        <label className="block text-sm font-medium text-[var(--color-text-secondary)]">
+          Location
+        </label>
+        <div className="flex gap-2">
+          <input
+            className="glass-input flex-1"
+            placeholder="e.g. San Francisco, CA or Remote"
+            {...register('location')}
+          />
+          <Button
+            type="button"
+            variant="secondary"
+            size="sm"
+            onClick={handleGeocode}
+            disabled={!locationValue || isGeocoding}
+          >
+            {isGeocoding ? (
+              <Loader2 size={14} className="animate-spin" />
+            ) : (
+              <MapPin size={14} />
+            )}
+            Locate
+          </Button>
+        </div>
+        {locationLatValue != null && locationLngValue != null && (
+          <LocationMap
+            lat={locationLatValue}
+            lng={locationLngValue}
+            height="200px"
+            interactive={true}
+          />
+        )}
       </div>
 
       {showAppliedSection && (

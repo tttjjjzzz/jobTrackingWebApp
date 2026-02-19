@@ -102,6 +102,9 @@ export class JobsService {
       externalLinks: JSON.stringify(data.externalLinks ?? []),
       status: data.status ?? 'not_applied',
       logoUrl: data.logoUrl ?? null,
+      location: data.location ?? null,
+      locationLat: data.locationLat ?? null,
+      locationLng: data.locationLng ?? null,
       createdAt: now,
       updatedAt: now,
     };
@@ -130,6 +133,9 @@ export class JobsService {
       updates.externalLinks = JSON.stringify(data.externalLinks);
     if (data.status !== undefined) updates.status = data.status;
     if (data.logoUrl !== undefined) updates.logoUrl = data.logoUrl;
+    if (data.location !== undefined) updates.location = data.location;
+    if (data.locationLat !== undefined) updates.locationLat = data.locationLat;
+    if (data.locationLng !== undefined) updates.locationLng = data.locationLng;
 
     db.update(jobs).set(updates).where(eq(jobs.id, id)).run();
 

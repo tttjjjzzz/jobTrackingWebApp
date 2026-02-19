@@ -163,3 +163,19 @@ input[type="checkbox"] {
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 255, 255, 0.2);
 }
+
+/* Leaflet overrides for dark theme */
+.leaflet-container {
+  background: var(--color-surface);
+  font-size: 0.7rem; /* Reset from 20px root so Leaflet controls aren't oversized */
+}
+
+.leaflet-control-zoom a {
+  background: var(--glass-bg) !important;
+  border-color: var(--glass-border) !important;
+  color: var(--color-text-primary) !important;
+}
+
+.leaflet-control-zoom a:hover {
+  background: var(--glass-bg-hover) !important;
+}

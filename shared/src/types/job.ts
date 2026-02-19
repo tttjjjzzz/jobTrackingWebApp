@@ -14,6 +14,9 @@ export interface JobApplication {
   externalLinks: string[];
   status: ApplicationStatus;
   logoUrl: string | null;
+  location: string | null;
+  locationLat: number | null;
+  locationLng: number | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -30,6 +33,9 @@ export interface CreateJobDTO {
   externalLinks?: string[];
   status?: ApplicationStatus;
   logoUrl?: string | null;
+  location?: string | null;
+  locationLat?: number | null;
+  locationLng?: number | null;
 }
 
 export interface UpdateJobDTO extends Partial<CreateJobDTO> {}

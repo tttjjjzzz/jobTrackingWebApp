@@ -25,6 +25,9 @@ export function runMigrations() {
   // so we attempt each and swallow the "duplicate column" error.
   const addColumns = [
     sql`ALTER TABLE jobs ADD COLUMN logo_url TEXT`,
+    sql`ALTER TABLE jobs ADD COLUMN location TEXT`,
+    sql`ALTER TABLE jobs ADD COLUMN location_lat REAL`,
+    sql`ALTER TABLE jobs ADD COLUMN location_lng REAL`,
   ];
   for (const stmt of addColumns) {
     try {

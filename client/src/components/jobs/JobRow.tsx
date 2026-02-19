@@ -1,4 +1,4 @@
-import { Pencil, Trash2, ExternalLink } from 'lucide-react';
+import { Pencil, Trash2, ExternalLink, MapPin } from 'lucide-react';
 import type { JobApplication } from '@jobtracker/shared';
 import { POSITION_TYPE_LABELS } from '@jobtracker/shared';
 import { IconButton } from '../ui/IconButton';
@@ -16,7 +16,7 @@ export function JobRow({ job }: JobRowProps) {
 
   return (
     <div
-      className="glass-hover group grid grid-cols-[2fr_1.5fr_120px_1fr_1fr_96px] gap-4 items-center px-4 py-3 rounded-xl border border-transparent hover:border-white/10 cursor-pointer"
+      className="glass-hover group grid grid-cols-[2fr_1fr_1fr_120px_1fr_1fr_96px] gap-4 items-center px-4 py-3 rounded-xl border border-transparent hover:border-white/10 cursor-pointer"
       onDoubleClick={() => dispatch({ type: 'OPEN_EDITOR', payload: job.id })}
     >
       <div className="flex items-center gap-2 min-w-0">
@@ -35,8 +35,17 @@ export function JobRow({ job }: JobRowProps) {
         </div>
       </div>
 
-      <span className="text-xs text-[var(--color-text-secondary)]">
+      <span className="text-xs text-[var(--color-text-secondary)] truncate">
         {POSITION_TYPE_LABELS[job.positionType as keyof typeof POSITION_TYPE_LABELS] || job.positionType}
+      </span>
+
+      <span className="text-xs text-[var(--color-text-muted)] truncate flex items-center gap-1">
+        {job.location && (
+          <>
+            <MapPin size={10} className="flex-shrink-0" />
+            {job.location}
+          </>
+        )}
       </span>
 
       <div className="justify-self-end">

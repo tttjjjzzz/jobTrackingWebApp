@@ -1,10 +1,12 @@
-import { Pencil, Trash2, ExternalLink, Calendar } from 'lucide-react';
+import { useState, useRef, useEffect } from 'react';
+import { Pencil, Trash2, ExternalLink, Calendar, MapPin, X } from 'lucide-react';
 import type { JobApplication } from '@jobtracker/shared';
 import { POSITION_TYPE_LABELS } from '@jobtracker/shared';
 import { Card } from '../ui/Card';
 import { IconButton } from '../ui/IconButton';
 import { StatusBadge } from './StatusBadge';
 import { CompanyLogo } from '../ui/CompanyLogo';
+import { LocationMap } from '../ui/LocationMap';
 import { formatRelativeDate, formatPositionLength } from '../../utils/format';
 import { useAppState } from '../../context/AppContext';
 
@@ -14,6 +16,22 @@ interface JobCardProps {
 
 export function JobCard({ job }: JobCardProps) {
   const { dispatch } = useAppState();
+  const [showMapPopup, setShowMapPopup] = useState(false);
+  const popupRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!showMapPopup) return;
+    const handleKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setShowMapPopup(false); };
+    const handleClick = (e: MouseEvent) => {
+      if (popupRef.current && !popupRef.current.contains(e.target as Node)) setShowMapPopup(false);
+    };
+    document.addEventListener('keydown', handleKey);
+    document.addEventListener('mousedown', handleClick);
+    return () => {
+      document.removeEventListener('keydown', handleKey);
+      document.removeEventListener('mousedown', handleClick);
+    };
+  }, [showMapPopup]);
 
   return (
     <Card
@@ -49,6 +67,52 @@ export function JobCard({ job }: JobCardProps) {
           {formatPositionLength(job.positionLength, job.positionType)}
         </span>
       </div>
+
+      {job.location && (
+        <div className="relative">
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              if (job.locationLat != null && job.locationLng != null) setShowMapPopup(true);
+            }}
+            className={`flex items-center gap-1 text-xs text-[var(--color-text-muted)] max-w-full ${job.locationLat != null ? 'hover:text-[var(--color-accent)] cursor-pointer' : 'cursor-default'}`}
+          >
+            <MapPin size={12} className="flex-shrink-0" />
+            <span className="truncate">{job.location}</span>
+          </button>
+
+          {showMapPopup && job.locationLat != null && job.locationLng != null && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+              <div className="absolute inset-0 bg-black/60" />
+              <div
+                ref={popupRef}
+                className="relative glass w-full max-w-lg"
+                style={{ background: 'rgba(20, 21, 28, 0.92)' }}
+              >
+                <div className="flex items-center justify-between p-4 pb-3">
+                  <div className="flex items-center gap-2 text-sm font-medium text-[var(--color-text-primary)]">
+                    <MapPin size={14} className="text-[var(--color-accent)]" />
+                    {job.location}
+                  </div>
+                  <IconButton label="Close" onClick={() => setShowMapPopup(false)}>
+                    <X size={16} />
+                  </IconButton>
+                </div>
+                <div className="px-4 pb-4">
+                  <LocationMap
+                    lat={job.locationLat}
+                    lng={job.locationLng}
+                    height="300px"
+                    zoom={12}
+                    interactive={true}
+                  />
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
 
       {job.comments && (
         <p className="text-xs text-[var(--color-text-muted)] line-clamp-2">

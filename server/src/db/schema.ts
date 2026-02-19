@@ -1,4 +1,4 @@
-import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core';
+import { sqliteTable, text, integer, real } from 'drizzle-orm/sqlite-core';
 import { sql } from 'drizzle-orm';
 
 export const jobs = sqliteTable('jobs', {
@@ -17,6 +17,9 @@ export const jobs = sqliteTable('jobs', {
     .default(sql`'[]'`),
   status: text('status').notNull().default('not_applied'),
   logoUrl: text('logo_url'),
+  location: text('location'),
+  locationLat: real('location_lat'),
+  locationLng: real('location_lng'),
   createdAt: text('created_at').notNull(),
   updatedAt: text('updated_at').notNull(),
 });
